@@ -1,2 +1,2 @@
-# aws-lamnda-pdf-spliter
-Python pdf spliter hosted on AWS Lambda
+# aws-lamnda-pdf-splitter
+Python pdf splitter hosted on AWS Lambda
