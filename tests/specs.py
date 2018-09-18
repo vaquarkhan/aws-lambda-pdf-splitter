@@ -3,10 +3,19 @@ modulePath = os.path.abspath("../PdfSplitter")
 if modulePath not in sys.path:
     sys.path.insert(0, modulePath)
 
-
+from pdfminer.pdfparser import PDFParser
+from pdfminer.pdfdocument import PDFDocument
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfpage import PDFTextExtractionNotAllowed
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfdevice import PDFDevice
+from pdfminer.layout import LAParams, LTTextBox, LTTextLine
+from pdfminer.converter import PDFPageAggregator
 from ConfigEnv import Config
 import unittest
 import boto3
+import warnings
 
 from PdfSplitter import Splitter
 
@@ -14,9 +23,11 @@ class TestSplitter(unittest.TestCase):
     """docstring for TestSplitter."""
 
     def setUp(self):
+        warnings.filterwarnings("ignore", category=ResourceWarning, message="unclosed.*<ssl.SSLSocket.*>")
+
         self._config = Config(self.getCurrentPath()+"data/testConfig.json")
         self._config.addFile = Config(self.getCurrentPath()+"data/splitterConfig.json")
-        s3 = boto3.resource(
+        self._s3 = boto3.resource(
             's3',
             'eu-west-1',
             aws_access_key_id=self._config.get("AWS_ACCESS_KEY_ID"),
@@ -24,19 +35,56 @@ class TestSplitter(unittest.TestCase):
             aws_session_token= self._config.get("AWS_SESSION_TOKEN")
         )
 
-        self._letterKey = self.getCurrentPath()+"data/pdf/letter.pdf";
-        self._numberKey = self.getCurrentPath()+"data/pdf/number.pdf";
+        self._letterPath = self.getCurrentPath()+"data/pdf/letter.pdf";
+        self._numberPath = self.getCurrentPath()+"data/pdf/number.pdf";
 
-        bucket = s3.Bucket(self._config.get("AWS_S3_BUCKET"))
+        bucket = self._s3.Bucket(self._config.get("AWS_S3_BUCKET"))
 
         # uplaod sur le bucket de données de test
-        bucket.upload_file(self._letterKey, 'letter.pdf')
-        bucket.upload_file(self._numberKey, 'number.pdf')
-
-    def getCurrentPath(self):
-        return os.path.dirname(os.path.abspath(__file__))+"/"
+        bucket.upload_file(self._letterPath, 'letter.pdf')
+        bucket.upload_file(self._numberPath, 'number.pdf')
 
     def test__init__(self):
         splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
         for object in splitter._s3.Bucket(self._config.get("AWS_S3_BUCKET")).objects.all():
-            print( object )
+            self.assertEqual( object.bucket_name, self._config.get("AWS_S3_BUCKET") )
+
+    def test__downloadAndCache(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        splitter._downloadAndCache("letter.pdf")
+        with open(self._letterPath,"rb") as testFile :
+            self.assertEqual( self.pdfToStr( splitter._cachePdf["letter.pdf"] ) , self.pdfToStr( testFile ) )
+
+
+        # with open(self._letterPath, mode='rb') as file: # b is important -> binary
+        #     # fileContent = file.read()
+        #     self.assertEqual( , file.read())
+
+
+
+
+
+
+    def getCurrentPath(self):
+        return os.path.dirname(os.path.abspath(__file__))+"/"
+
+    def pdfToStr(self,pdfBuffer):
+        pages=[]
+        parser = PDFParser(pdfBuffer)
+        document = PDFDocument(parser)
+        if not document.is_extractable:
+            raise PDFTextExtractionNotAllowed
+        rsrcmgr = PDFResourceManager()
+        laparams = LAParams()
+        device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        for page in PDFPage.create_pages(document):
+            extracted_text = ""
+            interpreter.process_page(page)
+            layout = device.get_result()
+            for lt_obj in layout:
+                if isinstance(lt_obj, LTTextBox) or isinstance(lt_obj, LTTextLine):
+                    extracted_text += lt_obj.get_text()
+            pages.append(extracted_text)
+
+        return(pages)
