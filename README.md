@@ -24,5 +24,5 @@ with unittest :
     # if your test config is setup :
     python -m unittest
 
-    # if you want to overide your test config : 
+    # if you want to overide your test config :
     AWS_S3_BUCKET=<your bucket> AWS_ACCESS_KEY_ID=<your key id> AWS_SECRET_ACCESS_KEY=<your key secret> python -m unittest
