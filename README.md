@@ -16,3 +16,9 @@ with virtualenv :
 
     # install dependancies
     pip install -r requirements.txt
+
+### testing
+
+with unittest :
+
+    python -m unittest 
