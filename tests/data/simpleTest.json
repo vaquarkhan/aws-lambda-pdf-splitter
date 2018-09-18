@@ -1,0 +1,27 @@
+{
+    "input": [
+        "letter.pdf",
+        "number.pdf"
+    ],
+    "output": [
+        {
+            "s3Key": "output.pdf",
+            "pages": [
+                {
+                    "index": 0,
+                    "pages": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "index": 1,
+                    "pages": [
+                        0,
+                        1
+                    ]
+                }
+            ]
+        }
+    ]
+}
