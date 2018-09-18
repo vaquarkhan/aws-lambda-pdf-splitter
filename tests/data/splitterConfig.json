@@ -1,0 +1,6 @@
+{
+    "aws" : {
+        "access_key_id" : "aws-acces-key",
+        "secret_access_key" : "aws secret"
+    }
+}
