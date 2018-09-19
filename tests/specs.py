@@ -16,6 +16,7 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 from ConfigEnv import Config
 import unittest
 import boto3
+import json
 import warnings
 
 from PdfSplitter import Splitter
@@ -39,11 +40,11 @@ class TestSplitter(unittest.TestCase):
         self._letterPath = self.getCurrentPath()+"data/pdf/letter.pdf";
         self._numberPath = self.getCurrentPath()+"data/pdf/number.pdf";
 
-        bucket = self._s3.Bucket(self._config.get("AWS_S3_BUCKET"))
+        self._bucket = self._s3.Bucket(self._config.get("AWS_S3_BUCKET"))
 
         # uplaod sur le bucket de données de test
-        bucket.upload_file(self._letterPath, 'letter.pdf')
-        bucket.upload_file(self._numberPath, 'number.pdf')
+        self._bucket.upload_file(self._letterPath, 'letter.pdf')
+        self._bucket.upload_file(self._numberPath, 'number.pdf')
 
     def test__init__(self):
         splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
@@ -79,6 +80,19 @@ class TestSplitter(unittest.TestCase):
         with open(out,"rb") as outputReadStream:
             self.assertEqual( self.pdfToStr( outputReadStream ) , [ "d\n" ] )
 
+
+    def test__uploadToS3(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        page3 = splitter._getOnePage("letter.pdf",2)
+        writer = PdfFileWriter()
+        writer.addPage(page3)
+        splitter._uploadToS3(writer,"output.pdf")
+
+        out = self.getCurrentPath()+"data/pdf/temp/out.pdf"
+
+        self._bucket.download_file("output.pdf",out)
+        with open(out,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "c\n" ] )
 
 
 

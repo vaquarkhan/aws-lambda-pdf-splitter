@@ -43,3 +43,9 @@ class Splitter():
         if fileKey not in self._cachePage:
             self._cachePdfOneFile(fileKey)
         return self._cachePage[fileKey][page]
+    def _uploadToS3(self,writer,key):
+        outputWriteStream = io.BytesIO()
+        writer.write(outputWriteStream)
+        outputWriteStream.seek(0)
+        self._bucket.upload_fileobj(outputWriteStream, key)
+
