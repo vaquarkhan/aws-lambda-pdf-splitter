@@ -105,3 +105,4 @@ venv.bak/
 
 
 tests/data/pdf/temp
+.temp
