@@ -26,3 +26,17 @@ class Splitter():
         self._bucket.download_fileobj(fileKey,binaryBuffer)
         s3Object = self._s3.Object(self._config.get("AWS_S3_BUCKET"),fileKey)
         self._cachePdf[fileKey] = io.BytesIO(s3Object.get()["Body"].read())
+
+
+    def _cachePdfOneFile(self,fileKey):
+        self._downloadAndCache(fileKey)
+
+        pdfBuffer = self._cachePdf[fileKey]
+        self._cachePage[fileKey] = []
+        cachePage = self._cachePage[fileKey]
+
+        infileReader = PdfFileReader(pdfBuffer)
+
+        for i in range(infileReader.getNumPages()):
+            page = infileReader.getPage(i)
+            cachePage.append(page)

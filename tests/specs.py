@@ -12,6 +12,7 @@ from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfdevice import PDFDevice
 from pdfminer.layout import LAParams, LTTextBox, LTTextLine
 from pdfminer.converter import PDFPageAggregator
+from PyPDF2 import PdfFileWriter, PdfFileReader
 from ConfigEnv import Config
 import unittest
 import boto3
@@ -55,11 +56,17 @@ class TestSplitter(unittest.TestCase):
         with open(self._letterPath,"rb") as testFile :
             self.assertEqual( self.pdfToStr( splitter._cachePdf["letter.pdf"] ) , self.pdfToStr( testFile ) )
 
-
-        # with open(self._letterPath, mode='rb') as file: # b is important -> binary
-        #     # fileContent = file.read()
-        #     self.assertEqual( , file.read())
-
+    def test__cachePdfOneFile(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        splitter._cachePdfOneFile("letter.pdf")
+        writer = PdfFileWriter()
+        writer.addPage(splitter._cachePage["letter.pdf"][1])
+        writer.addPage(splitter._cachePage["letter.pdf"][2])
+        out = self.getCurrentPath()+"data/pdf/temp/out.pdf"
+        with open(out,"wb") as outputWriteStream:
+            writer.write(outputWriteStream)
+        with open(out,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "b\n","c\n" ] )
 
 
 
