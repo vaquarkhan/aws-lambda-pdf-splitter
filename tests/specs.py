@@ -68,6 +68,16 @@ class TestSplitter(unittest.TestCase):
         with open(out,"rb") as outputReadStream:
             self.assertEqual( self.pdfToStr( outputReadStream ) , [ "b\n","c\n" ] )
 
+    def test__getOnePage(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        page3 = splitter._getOnePage("letter.pdf",3)
+        out = self.getCurrentPath()+"data/pdf/temp/out.pdf"
+        writer = PdfFileWriter()
+        writer.addPage(page3)
+        with open(out,"wb") as outputWriteStream:
+            writer.write(outputWriteStream)
+        with open(out,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "d\n" ] )
 
 
 

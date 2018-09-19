@@ -40,3 +40,8 @@ class Splitter():
         for i in range(infileReader.getNumPages()):
             page = infileReader.getPage(i)
             cachePage.append(page)
+
+    def _getOnePage(self,fileKey,page):
+        if fileKey not in self._cachePage:
+            self._cachePdfOneFile(fileKey)
+        return self._cachePage[fileKey][page]
