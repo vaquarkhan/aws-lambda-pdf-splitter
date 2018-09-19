@@ -22,8 +22,6 @@ class Splitter():
 
 
     def _downloadAndCache(self,fileKey):
-        binaryBuffer = io.BytesIO()
-        self._bucket.download_fileobj(fileKey,binaryBuffer)
         s3Object = self._s3.Object(self._config.get("AWS_S3_BUCKET"),fileKey)
         self._cachePdf[fileKey] = io.BytesIO(s3Object.get()["Body"].read())
 
