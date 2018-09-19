@@ -106,6 +106,22 @@ class TestSplitter(unittest.TestCase):
         with open(out,"rb") as outputReadStream:
             self.assertEqual( self.pdfToStr( outputReadStream ) , [ "a\n","b\n","0\n","1\n" ] )
 
+    def test_split(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        with open(self.getCurrentPath()+"data/simpleTest.json") as data:
+            data= json.load(data)
+        splitter.split(data)
+
+        out1 = self.getCurrentPath()+"data/pdf/temp/out1.pdf"
+        out2 = self.getCurrentPath()+"data/pdf/temp/out2.pdf"
+        self._bucket.download_file("outputab01.pdf",out1)
+        self._bucket.download_file("outputa0b1.pdf",out2)
+        with open(out1,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "a\n","b\n","0\n","1\n" ] )
+        with open(out2,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "a\n","0\n","b\n","1\n" ] )
+
+
 
 
 
