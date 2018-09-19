@@ -11,13 +11,13 @@ cd .temp ;
 cp -r ../PdfSplitter .;
 cp -r ../lambda.py .;
 
-virtualenv -p python3 .venv ;
+virtualenv -p python3.7 .venv ;
 
 source .venv/bin/activate ;
 
 pip install -r ../requirements.txt ;
 
-mv .venv/lib/python3.6/site-packages/* . ;
+mv .venv/lib/python3.7/site-packages/* . ;
 
 rm .venv -rf ;
 
@@ -29,4 +29,6 @@ cd .. ;
 
 deactivate
 
-# rm -rf .temp ;
+rm -rf .temp ;
+
+# aws lambda update-function-code --function-name pdf-splitter --zip-file fileb://lambda.zip
