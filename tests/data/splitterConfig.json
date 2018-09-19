@@ -1,6 +1,9 @@
 {
     "aws" : {
         "access_key_id" : "aws-acces-key",
-        "secret_access_key" : "aws secret"
+        "secret_access_key" : "aws secret",
+        "s3" : {
+            "bucket" : "bucket"
+        }
     }
 }
