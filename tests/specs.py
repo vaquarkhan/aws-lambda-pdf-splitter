@@ -95,6 +95,19 @@ class TestSplitter(unittest.TestCase):
             self.assertEqual( self.pdfToStr( outputReadStream ) , [ "c\n" ] )
 
 
+    def test__splitOnePdf(self):
+        splitter = Splitter(self.getCurrentPath()+"data/splitterConfig.json")
+        with open(self.getCurrentPath()+"data/simpleTest.json") as data:
+            data= json.load(data)
+        splitter._splitOnePdf(data["input"], data["output"][0])
+
+        out = self.getCurrentPath()+"data/pdf/temp/out.pdf"
+        self._bucket.download_file("outputab01.pdf",out)
+        with open(out,"rb") as outputReadStream:
+            self.assertEqual( self.pdfToStr( outputReadStream ) , [ "a\n","b\n","0\n","1\n" ] )
+
+
+
 
     def getCurrentPath(self):
         return os.path.dirname(os.path.abspath(__file__))+"/"
