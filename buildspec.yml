@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+
+  install:
+    commands:
+      - echo Install started on `date`
+      - apt-get update
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - ./buildLambda.sh
+
+  post_build:
+    commands:
+      - aws lambda update-function-code --function-name pdf-splitter --zip-file fileb://lambda.zip

@@ -11,13 +11,13 @@ cd .temp ;
 cp -r ../PdfSplitter .;
 cp -r ../lambda.py .;
 
-virtualenv -p python3.7 .venv ;
+virtualenv -p python3.6 .venv ;
 
 source .venv/bin/activate ;
 
 pip install -r ../requirements.txt ;
 
-mv .venv/lib/python3.7/site-packages/* . ;
+mv .venv/lib/python3.6/site-packages/* . ;
 
 rm .venv -rf ;
 
