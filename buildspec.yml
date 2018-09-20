@@ -6,6 +6,7 @@ phases:
     commands:
       - echo Install started on `date`
       - apt-get update
+      - apt-get install zip
 
   build:
     commands:
