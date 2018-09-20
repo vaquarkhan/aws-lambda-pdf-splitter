@@ -8,7 +8,6 @@ mkdir .temp ;
 
 cd .temp ;
 
-cp -r ../PdfSplitter .;
 cp -r ../lambda.py .;
 
 virtualenv -p python3.6 .venv ;
