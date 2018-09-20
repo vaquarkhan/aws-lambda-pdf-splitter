@@ -1,28 +1,24 @@
 # aws-lambda-pdf-splitter
 Python pdf spliter hosted on AWS Lambda
 
+## Lambda Configuration
 
-## Developpement guide
+Environment variables :
 
-### installation
+    AWS_S3_BUCKET : your bucket
 
-with virtualenv :
+python version :
 
-    # create virtualenv
-    virtualenv -p python3 .venv
+    python3.6
 
-    # activate venv
-    source .venv/bin/activate
+handler :
+    lambda.lambdaPdfSplitter
 
-    # install dependancies
-    pip install -r requirements.txt
+memory :
+    1024mb
 
-### testing
+timeout :
+    5min
 
-with unittest :
-
-    # if your test config is setup :
-    python -m unittest
-
-    # if you want to overide your test config :
-    AWS_S3_BUCKET=<your bucket> AWS_ACCESS_KEY_ID=<your key id> AWS_SECRET_ACCESS_KEY=<your key secret> python -m unittest
+role:
+    basic lmabda execution role + s3 read and write
