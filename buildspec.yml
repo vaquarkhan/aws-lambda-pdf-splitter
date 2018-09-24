@@ -15,22 +15,21 @@ phases:
 
   post_build:
     commands:
-      - BRANCHE="test"
       - |
         if expr "${CODEBUILD_BUILD_ARN}" : ".*build/plv2qual:" >/dev/null; then
-          BRANCHE="qual";
+          BRANCHE="-qual";
         fi
       - |
         if expr "${CODEBUILD_BUILD_ARN}" : ".*build/plv2prod:" >/dev/null; then
-          BRANCHE="prod";
+          BRANCHE="-prod";
         fi
       - |
         if expr "${CODEBUILD_SOURCE_VERSION}" : "qual" >/dev/null; then
-          BRANCHE="qual";
+          BRANCHE="-qual";
         fi
       - |
         if expr "${CODEBUILD_SOURCE_VERSION}" : "prod" >/dev/null; then
-          BRANCHE="prod";
+          BRANCHE="-prod";
         fi
       - echo $BRANCHE
-      - aws lambda update-function-code --function-name "pdf-splitter-$BRANCHE" --zip-file fileb://lambda.zip
+      - aws lambda update-function-code --function-name "pdf-splitter$BRANCHE" --zip-file fileb://lambda.zip
