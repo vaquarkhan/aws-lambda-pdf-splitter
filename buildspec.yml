@@ -16,7 +16,7 @@ phases:
   post_build:
     commands:
       - |
-        if expr "${CODEBUILD_BUILD_ARN}" : ".*build/plv2qual:" >/dev/null; then
+        if expr "${CODEBUILD_BUILD_ARN}" : ".*build/lamba-pdf-splitter:" >/dev/null; then
           BRANCHE="-qual";
         fi
       - |
