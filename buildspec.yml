@@ -32,4 +32,4 @@ phases:
           BRANCHE="-prod";
         fi
       - echo $BRANCHE
-      - aws lambda update-function-code --function-name "pdf-splitter$BRANCHE" --zip-file fileb://lambda.zip
+      - aws lambda update-function-code --function-name "multi-lambda-pdfspliter-$BRANCHE" --zip-file fileb://lambda.zip
