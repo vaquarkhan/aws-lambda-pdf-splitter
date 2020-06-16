@@ -15,21 +15,4 @@ phases:
 
   post_build:
     commands:
-      - |
-        if expr "${CODEBUILD_BUILD_ARN}" : ".*build/lamba-pdf-splitter:" >/dev/null; then
-          BRANCHE="-qual";
-        fi
-      - |
-        if expr "${CODEBUILD_BUILD_ARN}" : ".*build/plv2prod:" >/dev/null; then
-          BRANCHE="-prod";
-        fi
-      - |
-        if expr "${CODEBUILD_SOURCE_VERSION}" : "qual" >/dev/null; then
-          BRANCHE="-qual";
-        fi
-      - |
-        if expr "${CODEBUILD_SOURCE_VERSION}" : "prod" >/dev/null; then
-          BRANCHE="-prod";
-        fi
-      - echo $BRANCHE
       - aws lambda update-function-code --function-name "multi-lambda-pdfspliter-$BRANCHE" --zip-file fileb://lambda.zip
