@@ -7,6 +7,8 @@ phases:
       - echo Install started on `date`
       - apt-get update
       - apt-get install zip
+    runtime-versions:
+      python: 3.8
 
   build:
     commands:
