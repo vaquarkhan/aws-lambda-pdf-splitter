@@ -10,13 +10,13 @@ cd .temp ;
 
 cp -r ../lambda.py .;
 
-virtualenv -p python3.6 .venv ;
+virtualenv -p python3.8 .venv ;
 
 source .venv/bin/activate ;
 
 pip install -r ../requirements.txt ;
 
-mv .venv/lib/python3.6/site-packages/* . ;
+mv .venv/lib/python3.8/site-packages/* . ;
 
 rm .venv -rf ;
 
