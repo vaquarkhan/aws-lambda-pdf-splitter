@@ -17,4 +17,4 @@ phases:
 
   post_build:
     commands:
-      - aws lambda update-function-code --function-name "multi-lambda-pdfspliter-$BRANCHE" --zip-file fileb://lambda.zip
+      - aws lambda update-function-code --function-name "$PROJET-lambda-$NAME-$BRANCHE" --zip-file fileb://lambda.zip
