@@ -18,3 +18,5 @@ phases:
   post_build:
     commands:
       - aws lambda update-function-code --function-name "multi-lambda-pdfspliter-$BRANCHE" --zip-file fileb://lambda.zip
+      - while [ "$statefunction" != "Successful" ]; do statefunction=$(aws lambda get-function --function-name "$PROJET-lambda-$NAME-$BRANCHE" | jq -r '.Configuration.LastUpdateStatus'); echo $statefunction; sleep 5; done
+      - aws lambda publish-version --function-name "$PROJET-lambda-$NAME-$BRANCHE"
