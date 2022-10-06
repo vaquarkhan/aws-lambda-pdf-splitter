@@ -1,4 +1,4 @@
-from Splitter import Splitter
+from splitter import Splitter
 
 import json
 
