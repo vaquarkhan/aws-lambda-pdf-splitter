@@ -1,4 +1,4 @@
-from PdfSplitter import Splitter
+from Splitter import Splitter
 
 import json
 
