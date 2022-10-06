@@ -1,1 +1,1 @@
-from .splitter import splitter
+from .splitter import Splitter
