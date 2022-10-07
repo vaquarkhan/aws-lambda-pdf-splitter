@@ -8,3 +8,4 @@ python-dateutil==2.7.3
 s3transfer==0.3.3
 six==1.11.0
 urllib3==1.25.9
+pikepdf==6.2

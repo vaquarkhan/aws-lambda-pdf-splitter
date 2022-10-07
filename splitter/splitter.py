@@ -4,7 +4,7 @@ import io
 import boto3
 import re
 from urllib.request import urlopen
-
+import pikepdf
 
 class Splitter():
     """docstring for Splitter."""
@@ -47,7 +47,7 @@ class Splitter():
         self._cachePage[fileKey] = []
         cachePage = self._cachePage[fileKey]
 
-        infileReader = PdfFileReader(pdfBuffer)
+        infileReader = pikepdf.Pdf.open(pdfBuffer) #PdfFileReader(pdfBuffer)
 
         for i in range(infileReader.getNumPages()):
             page = infileReader.getPage(i)
