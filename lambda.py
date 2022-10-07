@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from splitter import Splitter
 
 import json
