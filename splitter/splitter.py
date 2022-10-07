@@ -60,12 +60,9 @@ class Splitter():
         return self._cachePage[fileKey][page]
 
     def _uploadToS3(self,pdfResult,key):
-        # pdfResult.pages[0].Contents.page_contents_coalesce()
-        outputWriteStream = io.BytesIO(pdfResult.pages[0].Contents.get_stream_buffer())
-        # outputWriteStream = io.BytesIO(writer.Contents.get_stream_buffer())
-        # writer.write(outputWriteStream)
+        outputWriteStream = io.BytesIO()
+        pdfResult.save(outputWriteStream)
         outputWriteStream.seek(0)
-        print outputWriteStream
         self._bucket.upload_fileobj(outputWriteStream, key)
 
     def _splitOnePdf(self,inputFiles, output):
@@ -77,7 +74,6 @@ class Splitter():
             for pageNumber in page["pages"]:
                 #Ajout de la page
                 #page.Rotate = 180
-                pdfResult.pages.extend(self._getOnePage(key,pageNumber))
+                pdfResult.pages.append(self._getOnePage(key,pageNumber))
 
-        # self._bucket.upload_fileobj(pdfResult[0].Object.read_bytes(), output["s3Key"])
         self._uploadToS3(pdfResult,output["s3Key"])
