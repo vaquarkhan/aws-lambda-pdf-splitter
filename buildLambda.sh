@@ -9,6 +9,7 @@ mkdir .temp ;
 cd .temp ;
 
 cp -r ../lambda.py .;
+cp -r ../splitter .;
 
 virtualenv -p python3.8 .venv ;
 
