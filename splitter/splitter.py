@@ -54,12 +54,11 @@ class Splitter():
             page = infileReader.pages[i]
             cachePage.append(page)
 
-    # def _getOnePage(self,fileKey,page, rotation):
-    def _getOnePage(self,fileKey,page):
+    def _getOnePage(self,fileKey,page, rotation):
         if fileKey not in self._cachePage:
             self._cachePdfOneFile(fileKey)
         pageOut = self._cachePage[fileKey][page]
-        # pageOut.Rotate = rotation
+        pageOut.Rotate = rotation
         return pageOut
 
     def _uploadToS3(self,pdfResult,key):
@@ -78,9 +77,8 @@ class Splitter():
             for pageNumber in page["pages"]:
                 #Ajout de la page
                 #page.Rotate = 180
-                # rotation = output["rotations"][i]
-                # pdfResult.pages.append(self._getOnePage(key,pageNumber, rotation))
-                pdfResult.pages.append(self._getOnePage(key,pageNumber))
+                rotation = output["rotations"][i]
+                pdfResult.pages.append(self._getOnePage(key,pageNumber, rotation))
                 i+=1
 
         self._uploadToS3(pdfResult,output["s3Key"])
