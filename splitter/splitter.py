@@ -78,6 +78,8 @@ class Splitter():
                 #Ajout de la page
                 #page.Rotate = 180
                 rotation = output["rotations"][i]
+
+                print("rotation pdf %s"%(rotation))
                 pdfResult.pages.append(self._getOnePage(key,pageNumber, rotation))
                 i+=1
 
