@@ -1,6 +1,8 @@
 # aws-lambda-pdf-splitter
 Python pdf spliter hosted on AWS Lambda
 
+>pip install -r requirements.tx
+
 ## Lambda Configuration
 
 Environment variables :
