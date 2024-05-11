@@ -2,6 +2,8 @@
 Python pdf spliter hosted on AWS Lambda
 
 >pip install -r requirements.tx
+>pip index versions pikepdf
+
 
 ## Lambda Configuration
 
